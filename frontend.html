@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Study Q&A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="frontend.css" />
+</head>
+<body>
+  <div id="aurora-background" class="aurora-background"></div>
+  
+  <div class="glow"></div>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+    <button id="sidebarToggle" class="sidebar-toggle"></button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div>
+          <div class="sidebar-title">Q&A</div>
+          
+        </div>
+      </div>
+      <button id="newQueryBtn" class="ghost-btn">New Query</button>
+      <div id="savedList" class="saved-list"></div>
+    </aside>
+
+    <div class="resizer" id="resizer"></div>
+
+    <main class="card" id="mainContent">
+      <div class="chat-container">
+        <div class="title">
+          <h1>Study Q&A</h1>
+        </div>
+
+        <p class="footnote">Ask anything. Get a concise answer with a smooth, animated experience.</p>
+
+        <div class="status" id="status">
+          <span>Ready when you are.</span>
+        </div>
+
+        <section class="answer" id="answerBox">
+          <div id="answer" class="answer-content"></div>
+        </section>
+      </div>
+
+      <div class="input-island">
+        <div class="input-row">
+          <div class="input-wrap">
+            <input
+              type="text"
+              id="questionInput"
+              placeholder="Type your question here..."
+              autocomplete="off"
+            />
+          </div>
+          <button id="submitBtn">Ask</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <button id="diagramiseBtn" class="floating-btn">Diagramise</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+  <script src="gradual-blur.js"></script>
+  <script src="aurora.js"></script>
+  <script src="shiny-text.js"></script>
+  <script src="frontend.js" defer></script>
+</body>
+</html>
