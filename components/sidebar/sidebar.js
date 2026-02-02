@@ -318,9 +318,19 @@ const SidebarComponent = {
         elements.input.value = item.question || "";
         
         if (item.answerHTML) {
+          // Remove animation class to reset it
+          elements.answerEl.classList.remove("popIn");
+          // Trigger reflow to restart animation
+          void elements.answerEl.offsetWidth;
           elements.answerEl.innerHTML = item.answerHTML;
+          elements.answerEl.classList.add("popIn");
         } else {
+          // Remove animation class to reset it
+          elements.answerEl.classList.remove("popIn");
+          // Trigger reflow to restart animation
+          void elements.answerEl.offsetWidth;
           elements.answerEl.innerHTML = marked.parse(item.answer || "");
+          elements.answerEl.classList.add("popIn");
         }
         
         elements.answerEl.classList.add("fade-in");

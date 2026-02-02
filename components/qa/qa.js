@@ -80,6 +80,9 @@ const QaComponent = {
       const text = data.answer || data.error || "No response.";
       await Utils.typeMarkdown(text, answerEl, marked);
       
+      // Add pop-in animation
+      answerEl.classList.add("popIn");
+      
       // Generate unique ID for this response
       const responseId = Utils.generateId();
       
@@ -111,6 +114,7 @@ const QaComponent = {
     } catch (error) {
       console.error("Answer fetch error:", error);
       await Utils.typeMarkdown("Something went wrong. Please try again.", answerEl, marked);
+      answerEl.classList.add("popIn");
       this.setStatus("Connection error: " + error.message);
       this.updateGreetingState();
     } finally {

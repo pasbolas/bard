@@ -75,6 +75,7 @@ const TodoComponent = {
 
     this.state.hasAsked = true;
     answerEl.innerHTML = this.state.placeholderHTML;
+    answerEl.classList.add("popIn");
     this.setStatus("Summary ready.");
     this.addToHistory(this.state.placeholderHTML, title);
     input.value = "";
@@ -139,7 +140,12 @@ const TodoComponent = {
   loadHistoryItem(summaryHTML) {
     const { answerEl } = this.elements;
     if (answerEl) {
+      // Remove animation class to reset it
+      answerEl.classList.remove("popIn");
+      // Trigger reflow to restart animation
+      void answerEl.offsetWidth;
       answerEl.innerHTML = summaryHTML || this.state.placeholderHTML;
+      answerEl.classList.add("popIn");
     }
     this.setStatus("Loaded from todo history.");
     this.state.hasAsked = true;
