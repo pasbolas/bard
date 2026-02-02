@@ -227,7 +227,7 @@
 }
 
 .sidebar::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .sidebar::-webkit-scrollbar-track {
@@ -235,12 +235,12 @@
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(176, 181, 188, 0.3);
-  border-radius: 4px;
+  background: rgba(176, 181, 188, 0.673);
+  border-radius: 3px;
 }
 
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(176, 181, 188, 0.5);
+  background: rgba(176, 181, 188, 0.599);
 }
 
 .sidebar-overlay {
@@ -249,7 +249,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.952);
   z-index: 998;
   display: none;
 }

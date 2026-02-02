@@ -141,6 +141,14 @@ const QaComponent = {
     const { input, submitBtn, answerEl } = this.elements;
     
     submitBtn.style.display = "";
+    input.disabled = false;
+    
+    // Show PDF button again
+    const pdfBtn = document.getElementById("pdfUploadBtn");
+    if (pdfBtn) {
+      pdfBtn.style.display = "";
+    }
+    
     input.value = "";
     input.focus();
     answerEl.innerHTML = "";

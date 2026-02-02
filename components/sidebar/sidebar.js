@@ -316,6 +316,7 @@ const SidebarComponent = {
       if (window.QaComponent) {
         const { elements } = window.QaComponent;
         elements.input.value = item.question || "";
+        elements.input.disabled = true;
         
         if (item.answerHTML) {
           // Remove animation class to reset it
@@ -336,6 +337,13 @@ const SidebarComponent = {
         elements.answerEl.classList.add("fade-in");
         window.QaComponent.setStatus("Loaded from saved responses.");
         elements.submitBtn.style.display = "none";
+        
+        // Hide PDF button when loading saved chat
+        const pdfBtn = document.getElementById("pdfUploadBtn");
+        if (pdfBtn) {
+          pdfBtn.style.display = "none";
+        }
+        
         window.QaComponent.state.hasAsked = true;
         window.QaComponent.state.currentResponseId = item.id;
 
