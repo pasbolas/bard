@@ -1,0 +1,33 @@
+/* Todo Component Styles */
+.input-row.todo-row {
+  grid-template-columns: 1fr auto;
+}
+
+.todo-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 0;
+  border: 1px solid var(--stroke);
+  background: #0f141b;
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  resize: vertical;
+  transition: border 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+.todo-input:focus {
+  border-color: rgba(176, 181, 188, 0.7);
+  box-shadow: 0 0 0 2px rgba(176, 181, 188, 0.2);
+  transform: translateY(-1px);
+}
+
+.todo-input.shake {
+  animation: shake 0.3s ease;
+}
+
+.placeholder-text {
+  color: var(--muted);
+  font-style: italic;
+}

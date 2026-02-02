@@ -1,0 +1,117 @@
+/* Layout Styles - Main structure and positioning */
+.layout {
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+
+.card {
+  flex: 1;
+  background: rgba(21, 24, 29, 0.7);
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow-y: auto;
+  animation: pop 600ms ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chat-container {
+  flex: 1 1 auto;
+  overflow-y: visible;
+  padding: 0 28px 28px 28px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.input-island {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 28px;
+  background: var(--card);
+  border-top: 1px solid var(--stroke);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: auto;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.title {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 0 0 12px 0;
+  transition: transform 420ms ease, opacity 300ms ease;
+}
+
+.badge {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--stroke);
+  padding: 6px 10px;
+  border-radius: 0;
+  background: transparent;
+}
+
+h1 {
+  margin: 0;
+  padding-top: 20px;
+  font-size: 28px;
+  transition: transform 420ms ease;
+}
+
+.mode-panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mode-panel.is-hidden {
+  display: none;
+}
+
+.card.is-empty .title {
+  transform: translateY(120px);
+}
+
+.card.is-empty .footnote {
+  opacity: 1;
+  transform: translateY(120px);
+}
+
+.footnote {
+  color: var(--muted);
+  font-size: 13px;
+  opacity: 0;
+  margin-bottom: 12px;
+  transition: opacity 300ms ease, transform 420ms ease;
+}

@@ -1,0 +1,340 @@
+/* Sidebar Component Styles */
+.sidebar {
+  background: var(--card);
+  border-right: 1px solid var(--stroke);
+  border-radius: 0;
+  padding: 18px;
+  width: 320px;
+  min-width: 240px;
+  max-width: 520px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.resizer {
+  width: 4px;
+  background: var(--stroke);
+  cursor: col-resize;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 160ms ease;
+}
+
+.resizer:hover {
+  background: rgba(176, 181, 188, 0.5);
+}
+
+.resizer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  right: -4px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  height: 40px;
+}
+
+.mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--stroke);
+  background: #0f141b;
+}
+
+.mode-btn {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: "Impact", "Haettenschweiler", "Arial Black", sans-serif;
+  cursor: pointer;
+  height: 34px;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.mode-btn:not(:last-child) {
+  border-right: 1px solid var(--stroke);
+}
+
+.mode-btn.active {
+  background: rgba(176, 181, 188, 0.16);
+  color: var(--text);
+}
+
+.mode-btn:focus-visible {
+  outline: 2px solid rgba(176, 181, 188, 0.5);
+  outline-offset: 2px;
+}
+
+.sidebar-close-btn {
+  display: none;
+}
+
+.ghost-btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--stroke);
+  padding: 0 10px;
+  height: 40px;
+  margin: 0 14px 12px 0;
+  border-radius: 0;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border 160ms ease, transform 160ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 14px);
+  flex: 0 0 auto;
+}
+
+.ghost-btn:hover {
+  border-color: rgba(180, 185, 192, 0.6);
+  transform: translateY(-1px);
+}
+
+#newQueryBtn {
+  width: 100%;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 12px 14px 8px 14px;
+  border-bottom: 1px solid var(--stroke);
+  margin-top: 4px;
+}
+
+.saved-item {
+  border-bottom: 1px solid var(--stroke);
+  border-radius: 0;
+  padding: 12px 14px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 160ms ease, border 160ms ease;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.saved-item:first-child {
+  border-top: 1px solid var(--stroke);
+}
+
+.saved-item:hover {
+  background: rgba(180, 185, 192, 0.08);
+  border-color: rgba(180, 185, 192, 0.4);
+}
+
+.saved-item-actions {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+
+.saved-item:hover .saved-item-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.item-action-btn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: rgba(176, 181, 188, 0.15);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 120ms ease;
+  border-radius: 4px;
+}
+
+.item-action-btn:hover {
+  background: rgba(176, 181, 188, 0.3);
+  transform: scale(1.1);
+}
+
+.item-action-btn.favorite {
+  color: #fbbf24;
+}
+
+.saved-question {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 4px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.saved-meta {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.sidebar-mode.is-hidden {
+  display: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(176, 181, 188, 0.3);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(176, 181, 188, 0.5);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  display: none;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+.sidebar-toggle {
+  display: none !important;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85%;
+    max-width: 320px;
+    height: 100%;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--stroke);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 160ms ease;
+  }
+
+  .sidebar-close-btn:hover {
+    background: rgba(176, 181, 188, 0.1);
+    border-color: var(--accent);
+  }
+
+  .sidebar-toggle {
+    display: flex !important;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 50;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 160ms ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .sidebar-toggle.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar-toggle.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar-toggle:hover {
+    background: rgba(176, 181, 188, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .resizer {
+    display: none;
+  }
+}

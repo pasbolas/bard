@@ -1,0 +1,30 @@
+/* PDF Component Styles */
+.pdf-btn {
+  height: 48px;
+  width: 48px;
+  padding: 0;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: 1px solid var(--stroke);
+  background: #0f141b;
+  color: var(--text);
+  transition: all 160ms ease;
+}
+
+.pdf-btn:hover {
+  border-color: var(--accent);
+  background: rgba(176, 181, 188, 0.1);
+  transform: translateY(-1px);
+}
+
+.pdf-btn:active {
+  transform: translateY(0);
+}
+
+.pdf-btn.loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

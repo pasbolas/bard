@@ -7,8 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="frontend.css" />
-  <link rel="stylesheet" href="dock.css" />
+  
+  <!-- Base Styles -->
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/layout.css" />
+  
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="components/qa/qa.css" />
+  <link rel="stylesheet" href="components/todo/todo.css" />
+  <link rel="stylesheet" href="components/sidebar/sidebar.css" />
+  <link rel="stylesheet" href="components/pdf/pdf.css" />
+  <link rel="stylesheet" href="components/dock/dock.css" />
 </head>
 <body>
   <div id="aurora-background" class="aurora-background"></div>
@@ -23,57 +32,100 @@
   <div class="layout">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div>
-          <div class="sidebar-title">Q&A</div>
-          
+        <div class="mode-toggle" role="tablist" aria-label="Mode">
+          <button id="qaModeBtn" class="mode-btn active" role="tab" aria-selected="true">Q&A</button>
+          <button id="todoModeBtn" class="mode-btn" role="tab" aria-selected="false">Todo</button>
         </div>
         <button id="sidebarCloseBtn" class="sidebar-close-btn" title="Close sidebar">✕</button>
       </div>
       <button id="newQueryBtn" class="ghost-btn">New Query</button>
       
-      <div class="sidebar-section">
-        <div class="section-title">Favorites</div>
-        <div id="favoritesList" class="saved-list"></div>
+      <div id="qaSidebar" class="sidebar-mode">
+        <div class="sidebar-section">
+          <div class="section-title">Favorites</div>
+          <div id="favoritesList" class="saved-list"></div>
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="section-title">History</div>
+          <div id="savedList" class="saved-list"></div>
+        </div>
       </div>
-      
-      <div class="sidebar-section">
-        <div class="section-title">History</div>
-        <div id="savedList" class="saved-list"></div>
+
+      <div id="todoSidebar" class="sidebar-mode is-hidden">
+        <div class="sidebar-section">
+          <div class="section-title">Todo History</div>
+          <div id="todoHistoryList" class="saved-list"></div>
+        </div>
       </div>
     </aside>
 
     <div class="resizer" id="resizer"></div>
 
     <main class="card" id="mainContent">
-      <div class="chat-container">
-        <div class="title">
-          <h1>Study Q&A</h1>
+      <div id="qaPanel" class="mode-panel">
+        <div class="chat-container">
+          <div class="title">
+            <h1 id="mainTitle">Study Q&A</h1>
+          </div>
+
+          <p class="footnote"></p>
+
+          <div class="status" id="status">
+            <span>Ready when you are.</span>
+          </div>
+
+          <section class="answer" id="answerBox">
+            <div id="answer" class="answer-content"></div>
+          </section>
         </div>
 
-        <p class="footnote"></p>
-
-        <div class="status" id="status">
-          <span>Ready when you are.</span>
+        <div class="input-island">
+          <div class="input-row">
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="questionInput"
+                placeholder="Type your question here..."
+                autocomplete="off"
+              />
+            </div>
+            <button id="pdfUploadBtn" class="pdf-btn" title="Upload PDF">PDF</button>
+            <input type="file" id="pdfInput" accept=".pdf" style="display: none;" />
+            <button id="submitBtn">Ask</button>
+          </div>
         </div>
-
-        <section class="answer" id="answerBox">
-          <div id="answer" class="answer-content"></div>
-        </section>
       </div>
 
-      <div class="input-island">
-        <div class="input-row">
-          <div class="input-wrap">
-            <input
-              type="text"
-              id="questionInput"
-              placeholder="Type your question here..."
-              autocomplete="off"
-            />
+      <div id="todoPanel" class="mode-panel is-hidden">
+        <div class="chat-container">
+          <div class="title">
+            <h1 id="todoTitle">Todo Summarizer</h1>
           </div>
-          <button id="pdfUploadBtn" class="pdf-btn" title="Upload PDF">PDF</button>
-          <input type="file" id="pdfInput" accept=".pdf" style="display: none;" />
-          <button id="submitBtn">Ask</button>
+
+          <p class="footnote"></p>
+
+          <div class="status" id="todoStatus">
+            <span>Todo summarizer ready.</span>
+          </div>
+
+          <section class="answer" id="todoAnswerBox">
+            <div id="todoAnswer" class="answer-content"></div>
+          </section>
+        </div>
+
+        <div class="input-island">
+          <div class="input-row todo-row">
+            <div class="input-wrap">
+              <textarea
+                id="todoInput"
+                class="todo-input"
+                placeholder="Paste your todo list here..."
+                rows="2"
+              ></textarea>
+            </div>
+            <button id="todoSubmitBtn">Summarize</button>
+          </div>
         </div>
       </div>
     </main>
@@ -86,11 +138,26 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
+  <!-- Effects Scripts -->
   <script src="gradual-blur.js"></script>
   <script src="aurora.js"></script>
   <script src="shiny-text.js"></script>
-  <script src="pdf-parser.js"></script>
-  <script src="dock.js"></script>
-  <script src="frontend.js" defer></script>
+  
+  <!-- Shared Utilities -->
+  <script src="components/shared/storage.js"></script>
+  <script src="components/shared/api.js"></script>
+  <script src="components/shared/utils.js"></script>
+  
+  <!-- Components -->
+  <script src="components/qa/qa.js"></script>
+  <script src="components/todo/todo.js"></script>
+  <script src="components/sidebar/sidebar.js"></script>
+  <script src="components/pdf/pdf.js"></script>
+  <script src="components/dock/dock.js"></script>
+  <script src="components/dock/dock-wrapper.js"></script>
+  
+  <!-- Main App -->
+  <script src="main.js" defer></script>
 </body>
 </html>
