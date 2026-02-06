@@ -22,12 +22,10 @@
 <body>
   <div id="aurora-background" class="aurora-background"></div>
   
-  <div class="glow"></div>
   <div class="orb one"></div>
   <div class="orb two"></div>
 
-  <button id="logoutBtn" class="logout-btn" title="Logout">↗</button>
-    <button id="sidebarToggle" class="sidebar-toggle">☰</button>
+  <button id="sidebarToggle" class="sidebar-toggle">☰</button>
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
   <div class="layout">
     <aside class="sidebar" id="sidebar">
@@ -36,7 +34,10 @@
           <button id="qaModeBtn" class="mode-btn active" role="tab" aria-selected="true">Q&A</button>
           <button id="todoModeBtn" class="mode-btn" role="tab" aria-selected="false">Todo</button>
         </div>
-        <button id="sidebarCloseBtn" class="sidebar-close-btn" title="Close sidebar">✕</button>
+        <div class="sidebar-actions">
+          <button id="themeToggle" class="theme-toggle" title="Toggle theme" aria-pressed="false">Light</button>
+          <button id="sidebarCloseBtn" class="sidebar-close-btn" title="Close sidebar">✕</button>
+        </div>
       </div>
       <button id="newQueryBtn" class="ghost-btn">New Query</button>
       
@@ -75,20 +76,18 @@
             <span>Ready when you are.</span>
           </div>
 
-          <section class="answer" id="answerBox">
-            <div id="answer" class="answer-content"></div>
-          </section>
+          <section class="chat-thread" id="chatThread"></section>
         </div>
 
         <div class="input-island">
           <div class="input-row">
             <div class="input-wrap">
-              <input
-                type="text"
+              <textarea
                 id="questionInput"
-                placeholder="Type your question here..."
-                autocomplete="off"
-              />
+                class="chat-input"
+                placeholder="Type your message..."
+                rows="1"
+              ></textarea>
             </div>
             <button id="pdfUploadBtn" class="pdf-btn" title="Upload PDF">PDF</button>
             <input type="file" id="pdfInput" accept=".pdf" style="display: none;" />
@@ -98,35 +97,54 @@
       </div>
 
       <div id="todoPanel" class="mode-panel is-hidden">
-        <div class="chat-container">
-          <div class="title">
-            <h1 id="todoTitle">Todo Summarizer</h1>
+        <div class="todo-pane">
+          <div class="chat-container">
+            <div class="title">
+              <h1 id="todoTitle">Todo Summarizer</h1>
+            </div>
+
+            <p class="footnote"></p>
+
+            <div class="status" id="todoStatus">
+              <span>Todo summarizer ready.</span>
+            </div>
+
+            <section class="answer" id="todoAnswerBox">
+              <div id="todoAnswer" class="answer-content"></div>
+            </section>
+
+            <div class="todo-list" id="todoList"></div>
           </div>
 
-          <p class="footnote"></p>
-
-          <div class="status" id="todoStatus">
-            <span>Todo summarizer ready.</span>
-          </div>
-
-          <section class="answer" id="todoAnswerBox">
-            <div id="todoAnswer" class="answer-content"></div>
-          </section>
-        </div>
-
-        <div class="input-island">
-          <div class="input-row todo-row">
-            <div class="input-wrap">
-              <textarea
+          <div class="input-island">
+            <div class="input-row todo-row">
+              <input
+                type="text"
                 id="todoInput"
                 class="todo-input"
-                placeholder="Paste your todo list here..."
-                rows="2"
-              ></textarea>
+                placeholder="Add a todo..."
+                autocomplete="off"
+              />
+              <input
+                type="time"
+                id="todoDueTime"
+                class="todo-time"
+              />
+              <button id="todoSubmitBtn">Add</button>
             </div>
-            <button id="todoSubmitBtn">Summarize</button>
           </div>
         </div>
+
+        <aside class="todo-planner" id="todoPlanner">
+          <div class="planner-header">
+            <h2>Planner</h2>
+            <button id="plannerBtn" class="planner-btn">Plan</button>
+          </div>
+          
+          <div class="planner-content" id="plannerContent">
+            <div class="planner-empty">Your plan will appear here</div>
+          </div> 
+        </aside>
       </div>
     </main>
   </div>

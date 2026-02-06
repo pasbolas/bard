@@ -31,22 +31,28 @@ const App = {
   },
 
   bindGlobalEvents() {
-    // Global glow effect
-    const glow = document.querySelector(".glow");
-    if (glow) {
-      document.addEventListener("mousemove", (event) => {
-        Utils.updateGlow(event, glow);
-      });
-    }
+    this.initThemeToggle();
 
-    // Logout button
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => {
-        // Add logout logic here
-        console.log("Logout clicked");
-      });
-    }
+  },
+
+  initThemeToggle() {
+    const toggle = document.getElementById("themeToggle");
+    if (!toggle) return;
+
+    const applyTheme = (theme) => {
+      document.documentElement.setAttribute("data-theme", theme);
+      toggle.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+      toggle.textContent = theme === "light" ? "Dark" : "Light";
+      localStorage.setItem("studyqa:theme", theme);
+    };
+
+    const saved = localStorage.getItem("studyqa:theme") || "dark";
+    applyTheme(saved);
+
+    toggle.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme") || "dark";
+      applyTheme(current === "light" ? "dark" : "light");
+    });
   }
 };
 

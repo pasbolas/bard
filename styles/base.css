@@ -3,6 +3,7 @@
   --bg-1: #0f1115;
   --bg-2: #0f1115;
   --card: #15181d;
+  --card-overlay: rgba(21, 24, 29, 0.7);
   --stroke: #2a2f36;
   --text: #e5e7eb;
   --muted: #9aa0a6;
@@ -11,6 +12,41 @@
   --success: #a9adb3;
   --danger: #a9adb3;
   --shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  --input-bg: #0f141b;
+  --code-bg: #0b1117;
+  --bubble-bg: rgba(15, 20, 27, 0.7);
+  --bubble-user-bg: rgba(96, 165, 250, 0.12);
+  --button-text: #0f1115;
+  --dock-bg: rgba(21, 24, 29, 0.8);
+  --dock-border: #2a2f36;
+  --dock-item-bg: rgba(21, 24, 29, 0.9);
+  --dock-item-hover: rgba(176, 181, 188, 0.1);
+  --dock-label-bg: rgba(21, 24, 29, 0.95);
+}
+
+:root[data-theme="light"] {
+  --bg-1: #f5f6f8;
+  --bg-2: #f5f6f8;
+  --card: #ffffff;
+  --card-overlay: rgba(255, 255, 255, 0.9);
+  --stroke: #d5d9df;
+  --text: #1f2933;
+  --muted: #5f6b7a;
+  --accent: #2563eb;
+  --accent-2: #1d4ed8;
+  --success: #15803d;
+  --danger: #b91c1c;
+  --shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  --input-bg: #f8fafc;
+  --code-bg: #eef2f7;
+  --bubble-bg: rgba(255, 255, 255, 0.9);
+  --bubble-user-bg: rgba(37, 99, 235, 0.12);
+  --button-text: #f8fafc;
+  --dock-bg: rgba(255, 255, 255, 0.9);
+  --dock-border: #d5d9df;
+  --dock-item-bg: rgba(255, 255, 255, 0.95);
+  --dock-item-hover: rgba(37, 99, 235, 0.12);
+  --dock-label-bg: rgba(255, 255, 255, 0.98);
 }
 
 * {
@@ -26,13 +62,33 @@ body {
   color: var(--text);
   height: 100vh;
   width: 100vw;
-  background: transparent;
+  background: var(--bg-1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.theme-toggle {
+  position: static;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 0;
+  border: 1px solid var(--stroke);
+  background: var(--card);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.theme-toggle:hover {
+  filter: brightness(1.04);
 }
 
 /* Aurora Background */
@@ -46,19 +102,6 @@ body {
 }
 
 /* Global effects */
-.glow {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    600px 300px at var(--mx, 50%) var(--my, 50%),
-    rgba(176, 181, 188, 0.06),
-    transparent 60%
-  );
-  transition: background 0.15s ease;
-  z-index: 0;
-}
-
 .orb {
   position: absolute;
   border-radius: 50%;
@@ -109,39 +152,3 @@ body {
   animation: popIn 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-/* Logout button */
-.logout-btn {
-  position: fixed;
-  top: 30px;
-  right: 30px;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  background: var(--accent);
-  color: #0f1115;
-  border: none;
-  border-radius: 8px;
-  font-size: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 160ms ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logout-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 768px) {
-  .logout-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-}

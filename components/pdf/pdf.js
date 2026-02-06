@@ -1,5 +1,9 @@
 // PDF Component - Handles PDF file processing
 const PdfComponent = {
+  state: {
+    pdfText: "",
+    fileName: ""
+  },
   elements: {},
 
   init() {
@@ -57,66 +61,30 @@ const PdfComponent = {
       window.QaComponent.setStatus("PDF parsed - Text extracted", true);
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      // Stage 4: Prepare for AI
-      window.QaComponent.state.hasAsked = true;
-      const answerBox = window.QaComponent.getAnswerBoxElement();
-      const answerEl = window.QaComponent.getAnswerElement();
-      
-      answerBox.classList.add("loading");
-      answerEl.innerHTML = "";
+      // Stage 4: Store parsed PDF for later use
+      this.state.pdfText = pdfText;
+      this.state.fileName = file.name;
 
-      window.QaComponent.setStatus("Sending to DeepSeek API...", true);
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
-      // Stage 5: AI Summarization
-      window.QaComponent.setStatus("DeepSeek is analyzing...", true);
-
-      const summaryPrompt = `Please provide a comprehensive summary of the following text. Extract key points, main ideas, and important information:\n\n${pdfText}`;
-
-      const data = await API.askQuestion(summaryPrompt);
-
-      // Stage 6: Process response
-      window.QaComponent.setStatus("Processing summary...", true);
-      const summary = data.answer || "No summary generated.";
-
-      // Stage 7: Render
-      window.QaComponent.setStatus("Rendering summary...", true);
-      await Utils.typeMarkdown(summary, answerEl, marked);
-
-      // Stage 8: Save to history
-      window.QaComponent.setStatus("Saving to history...", true);
-      const pdfQuestion = `[PDF] ${file.name}`;
-
-      const savedResponses = Storage.loadQaResponses();
-      savedResponses.unshift({
-        question: pdfQuestion,
-        answer: summary,
-        timestamp: new Date().toISOString()
-      });
-
-      if (savedResponses.length > 50) savedResponses.pop();
-      Storage.saveQaResponses(savedResponses);
-
-      if (window.SidebarComponent?.renderQaHistory) {
-        window.SidebarComponent.renderQaHistory();
-      }
-
-      // Stage 9: Complete
-      window.QaComponent.setStatus("PDF processed successfully!");
+      window.QaComponent.appendUserMessage(`[PDF] ${file.name} loaded`);
+      window.QaComponent.setStatus("PDF ready. Add instructions and click Ask.");
       window.QaComponent.updateGreetingState();
     } catch (error) {
       console.error("PDF processing error:", error);
-      const answerEl = window.QaComponent.getAnswerElement();
-      await Utils.typeMarkdown(`Error: ${error.message}`, answerEl, marked);
+      window.QaComponent.appendAssistantMessage(`Error: ${error.message}`);
       window.QaComponent.setStatus("Failed to process PDF.");
       window.QaComponent.updateGreetingState();
     } finally {
-      const answerBox = window.QaComponent.getAnswerBoxElement();
-      answerBox.classList.remove("loading");
       uploadBtn.classList.remove("loading");
       uploadBtn.disabled = false;
       input.value = ""; // Reset file input
     }
+  },
+
+  getPdfContext() {
+    return {
+      text: this.state.pdfText,
+      name: this.state.fileName
+    };
   },
 
   async parsePdf(file) {

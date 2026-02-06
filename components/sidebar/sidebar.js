@@ -175,11 +175,31 @@ const SidebarComponent = {
     const { qaSidebar, todoSidebar, newQueryBtn } = this.elements;
     const qaPanel = document.getElementById("qaPanel");
     const todoPanel = document.getElementById("todoPanel");
+    const dockContainer = document.getElementById("dock-container");
 
-    if (qaPanel) qaPanel.classList.toggle("is-hidden", mode !== "qa");
-    if (todoPanel) todoPanel.classList.toggle("is-hidden", mode !== "todo");
+    if (qaPanel) {
+      qaPanel.classList.toggle("is-hidden", mode !== "qa");
+      qaPanel.classList.remove("fade-in");
+      if (mode === "qa") {
+        void qaPanel.offsetWidth;
+        qaPanel.classList.add("fade-in");
+      }
+    }
+    if (todoPanel) {
+      todoPanel.classList.toggle("is-hidden", mode !== "todo");
+      todoPanel.classList.remove("fade-in");
+      if (mode === "todo") {
+        void todoPanel.offsetWidth;
+        todoPanel.classList.add("fade-in");
+      }
+    }
     if (qaSidebar) qaSidebar.classList.toggle("is-hidden", mode !== "qa");
     if (todoSidebar) todoSidebar.classList.toggle("is-hidden", mode !== "todo");
+    
+    // Hide dock in todo mode, show in qa mode
+    if (dockContainer) {
+      dockContainer.style.display = mode === "todo" ? "none" : "flex";
+    }
 
     if (newQueryBtn) {
       newQueryBtn.textContent = mode === "qa" ? "New Query" : "New Todo";
@@ -221,14 +241,13 @@ const SidebarComponent = {
 
   renderQaHistory() {
     const { favoritesList, savedList } = this.elements;
-    const savedResponses = Storage.loadQaResponses();
+    const conversations = Storage.loadQaConversations();
+    const sorted = conversations
+      .slice()
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
-    const favorites = savedResponses
-      .map((item, idx) => ({ ...item, originalIndex: idx }))
-      .filter((item) => item.isFavorite);
-    const regular = savedResponses
-      .map((item, idx) => ({ ...item, originalIndex: idx }))
-      .filter((item) => !item.isFavorite);
+    const favorites = sorted.filter((item) => item.isFavorite);
+    const regular = sorted.filter((item) => !item.isFavorite);
 
     // Render Favorites
     if (favoritesList) {
@@ -241,7 +260,7 @@ const SidebarComponent = {
         favoritesList.appendChild(empty);
       } else {
         favorites.forEach((item) => {
-          this.renderQaItem(item, item.originalIndex, favoritesList);
+          this.renderQaItem(item, item.id, favoritesList);
         });
       }
     }
@@ -257,13 +276,13 @@ const SidebarComponent = {
         savedList.appendChild(empty);
       } else {
         regular.forEach((item) => {
-          this.renderQaItem(item, item.originalIndex, savedList);
+          this.renderQaItem(item, item.id, savedList);
         });
       }
     }
   },
 
-  renderQaItem(item, index, container) {
+  renderQaItem(item, conversationId, container) {
     const card = document.createElement("div");
     card.className = "saved-item";
 
@@ -273,11 +292,11 @@ const SidebarComponent = {
 
     const question = document.createElement("div");
     question.className = "saved-question";
-    question.textContent = item.question || "Untitled question";
+    question.textContent = item.title || "New chat";
 
     const meta = document.createElement("div");
     meta.className = "saved-meta";
-    meta.textContent = Utils.formatDate(item.timestamp);
+    meta.textContent = Utils.formatDate(item.updatedAt || item.createdAt);
 
     content.appendChild(question);
     content.appendChild(meta);
@@ -294,7 +313,7 @@ const SidebarComponent = {
     favBtn.title = item.isFavorite ? "Remove from favorites" : "Add to favorites";
     favBtn.onclick = (e) => {
       e.stopPropagation();
-      this.toggleFavorite(index);
+      this.toggleFavorite(conversationId);
     };
 
     // Delete button
@@ -304,7 +323,7 @@ const SidebarComponent = {
     delBtn.title = "Delete";
     delBtn.onclick = (e) => {
       e.stopPropagation();
-      this.deleteQaResponse(index, card);
+      this.deleteQaResponse(conversationId, card);
     };
 
     actionsDiv.appendChild(favBtn);
@@ -314,47 +333,8 @@ const SidebarComponent = {
     // Click to load
     card.addEventListener("click", () => {
       if (window.QaComponent) {
-        const { elements } = window.QaComponent;
-        elements.input.value = item.question || "";
-        elements.input.disabled = true;
-        
-        if (item.answerHTML) {
-          // Remove animation class to reset it
-          elements.answerEl.classList.remove("popIn");
-          // Trigger reflow to restart animation
-          void elements.answerEl.offsetWidth;
-          elements.answerEl.innerHTML = item.answerHTML;
-          elements.answerEl.classList.add("popIn");
-        } else {
-          // Remove animation class to reset it
-          elements.answerEl.classList.remove("popIn");
-          // Trigger reflow to restart animation
-          void elements.answerEl.offsetWidth;
-          elements.answerEl.innerHTML = marked.parse(item.answer || "");
-          elements.answerEl.classList.add("popIn");
-        }
-        
-        elements.answerEl.classList.add("fade-in");
-        window.QaComponent.setStatus("Loaded from saved responses.");
-        elements.submitBtn.style.display = "none";
-        
-        // Hide PDF button when loading saved chat
-        const pdfBtn = document.getElementById("pdfUploadBtn");
-        if (pdfBtn) {
-          pdfBtn.style.display = "none";
-        }
-        
-        window.QaComponent.state.hasAsked = true;
-        window.QaComponent.state.currentResponseId = item.id;
-
-        // Update memify button state
-        if (window.DockComponent && item.hasMemeified) {
-          window.DockComponent.disableMemifyButton();
-        } else if (window.DockComponent) {
-          window.DockComponent.resetMemifyButton();
-        }
-
-        window.QaComponent.updateGreetingState();
+        window.QaComponent.setActiveConversation(conversationId);
+        window.QaComponent.setStatus("Loaded conversation.");
         this.closeSidebarIfMobile();
       }
     });
@@ -362,17 +342,18 @@ const SidebarComponent = {
     container.appendChild(card);
   },
 
-  toggleFavorite(index) {
-    const savedResponses = Storage.loadQaResponses();
-    if (savedResponses[index]) {
-      savedResponses[index].isFavorite = !savedResponses[index].isFavorite;
-      Storage.saveQaResponses(savedResponses);
+  toggleFavorite(conversationId) {
+    const conversations = Storage.loadQaConversations();
+    const convo = conversations.find((item) => item.id === conversationId);
+    if (convo) {
+      convo.isFavorite = !convo.isFavorite;
+      Storage.saveQaConversations(conversations);
       this.renderQaHistory();
     }
   },
 
-  deleteQaResponse(index, cardElement) {
-    const savedResponses = Storage.loadQaResponses();
+  deleteQaResponse(conversationId, cardElement) {
+    const conversations = Storage.loadQaConversations();
     
     // Highlight card
     if (cardElement) {
@@ -381,9 +362,12 @@ const SidebarComponent = {
     }
 
     // Show confirmation (simplified for now)
-    if (confirm("Delete this response?")) {
-      savedResponses.splice(index, 1);
-      Storage.saveQaResponses(savedResponses);
+    if (confirm("Delete this conversation?")) {
+      const updated = conversations.filter((item) => item.id !== conversationId);
+      Storage.saveQaConversations(updated);
+      if (window.QaComponent) {
+        window.QaComponent.deleteConversation(conversationId);
+      }
       this.renderQaHistory();
     } else if (cardElement) {
       cardElement.style.background = "";
